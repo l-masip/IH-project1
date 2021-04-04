@@ -23,12 +23,17 @@ const MAP_TILES = {//cambiar cualquier característica del mapa
     },
 }
 
+var deltaTime;
+
 class Game {
     constructor(gameScreen) {
         this.canvas = null;
         this.ctx = null;
         this.gameScreen = gameScreen;
         this.player = null;
+        this.dancerManager = null;
+        // Tiles in order that player/dancers will step on
+        this.steppableMap = null;
         this.monsters = [];
         this.activeMonsters = [];
         this.gameIsOver = false;
@@ -53,6 +58,9 @@ class Game {
         this.canvas.setAttribute("height", this.containerHeight);
 
         this.map = this.generateMap();
+        this.steppableMap = this.generateSteppableMap(this.map);
+        this.dancerManager = new DancerManager(this.canvas, this.steppableMap);
+        this.dancerManager.generateRound();
 
         // Play the background music of the game
         // document.getElementById("background-music").play();
@@ -79,19 +87,36 @@ class Game {
 
     startLoop() {
         const loop = function () {
+            // 1. UPDATE POSITION OF PLAYER AND SHOOT STATUS
+            // // 1. Create a mesure of time for each loop and adds a new monster every 2 seconds
             let now = Date.now();
-            let deltaTime = (now - this.lastTime) / 1000.0;
+            deltaTime = (now - this.lastTime) / 1000.0;
             this.lastTime = now;
 
 
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+            // Do the moves
+            this.dancerManager.orchestrate();
 
+            // 3. UPDATE THE CANVAS
             this.drawMap();
+            this.drawDancers();
+            // // Draw the player
+            // this.player.draw(deltaTime);
+
+            // // Draw the activeMonsters
+            // this.activeMonsters.forEach((monster) => {
+            //     monster.draw(deltaTime);
+            // });
 
 
+            // 4. TERMINATE LOOP IF THE GAME IS OVER
             if (!this.gameIsOver) {
-                window.requestAnimationFrame(loop);
+                // window.requestAnimationFrame(loop);
+                setTimeout(() => {
+                    loop();
+                }, 200);
             }
 
         }.bind(this); // var loop = function(){}.bind(this);
@@ -107,14 +132,51 @@ class Game {
             // Draw each column
             for (let column = 0; column < MAP_CELLS_X; column++) {
                 if (row === 0 || row === MAP_CELLS_Y - 1 || column === 0 || column === MAP_CELLS_X - 1) {
-                    map[row][column] = MAP_TILES.stepperCell;
+                    map[row][column] = {
+                        ...MAP_TILES.stepperCell,
+                        y: row,
+                        x: column,
+                    };
                 } else {
-                    map[row][column] = MAP_TILES.outerCell;
+                    map[row][column] = {
+                        ...MAP_TILES.outerCell,
+                        y: row,
+                        x: column,
+                    };
                 }
             }
         }
 
         return map;
+    }
+
+    generateSteppableMap(map) {
+        let steppableMap = [];
+
+        // Draw each row
+        map.forEach((row) => {
+            row.forEach((cell) => {
+                if (cell.steppable) {
+                    steppableMap.push(cell)
+                }
+            });
+        });
+
+        steppableMap = steppableMap.sort((cellA, cellB) => {
+            if (cellA.x >= cellA.y) {
+                if (cellA.x === cellB.x) {
+                    return cellA.y - cellB.y;
+                }
+                return cellA.x - cellB.x;
+            }
+
+            if (cellA.y === cellB.y) {
+                return cellB.x - cellA.x;
+            }
+            return cellB.y - cellA.y;
+        });
+
+        return steppableMap;
     }
 
     drawMap() {
@@ -126,6 +188,13 @@ class Game {
                 this.drawBackgroundCell(row, column);
             }
         }
+    }
+
+    drawDancers() {
+        this.dancerManager.getDrawable().forEach((dancer) => {
+            this.ctx.fillStyle = '#ffff00';
+            this.drawBackgroundCell(dancer.y, dancer.x, dancer.image);
+        });
     }
 
     drawBackgroundCell(posY, posX, image) {
