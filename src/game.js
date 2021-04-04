@@ -9,6 +9,20 @@ const CELL_HEIGHT = 30;
 const MAP_CELLS_X = 6;
 const MAP_CELLS_Y = 6;
 
+const PLAYER_START_CELL_X = 4;
+const PLAYER_START_CELL_Y = 6;
+
+const MAP_TILES = {//cambiar cualquier característica del mapa
+    stepperCell: {
+        background: '#ff0000',
+        steppable: true,
+    },
+    outerCell: {
+        background: '#0000ff',
+        steppable: false,
+    },
+}
+
 class Game {
     constructor(gameScreen) {
         this.canvas = null;
@@ -18,7 +32,7 @@ class Game {
         this.monsters = [];
         this.activeMonsters = [];
         this.gameIsOver = false;
-        this.map = {};
+        this.map = [];
         this.round = 0; //reutilizar?
     }
 
@@ -37,6 +51,8 @@ class Game {
         this.containerHeight = canvasContainer.offsetHeight;
         this.canvas.setAttribute("width", this.containerWidth);
         this.canvas.setAttribute("height", this.containerHeight);
+
+        this.map = this.generateMap();
 
         // Play the background music of the game
         // document.getElementById("background-music").play();
@@ -66,9 +82,10 @@ class Game {
             let now = Date.now();
             let deltaTime = (now - this.lastTime) / 1000.0;
             this.lastTime = now;
-            
+
 
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
 
             this.drawMap();
 
@@ -82,24 +99,35 @@ class Game {
         window.requestAnimationFrame(loop);
     }
 
-    drawMap() {
-        const stepperCell = "#ff0000";
-        const outerCell = "#00ff00";
+    generateMap() {
+        const map = [];
         // Draw each row
         for (let row = 0; row < MAP_CELLS_Y; row++) {
+            map[row] = [];
             // Draw each column
             for (let column = 0; column < MAP_CELLS_X; column++) {
-                if (row === 0 || row === MAP_CELLS_Y - 1 || column === 0 || column === MAP_CELLS_X - 1)  {
-                    this.ctx.fillStyle = stepperCell;
+                if (row === 0 || row === MAP_CELLS_Y - 1 || column === 0 || column === MAP_CELLS_X - 1) {
+                    map[row][column] = MAP_TILES.stepperCell;
                 } else {
-                    this.ctx.fillStyle = outerCell;
+                    map[row][column] = MAP_TILES.outerCell;
                 }
-                this.drawBackgroundCell(row, column);
             }
         }
 
+        return map;
     }
-    
+
+    drawMap() {
+        const map = this.map;
+        for (let row = 0; row < map.length; row++) {
+            for (let column = 0; column < map.length; column++) {
+                const cell = map[row][column];
+                this.ctx.fillStyle = cell.background;
+                this.drawBackgroundCell(row, column);
+            }
+        }
+    }
+
     drawBackgroundCell(posY, posX, image) {
         let startY = posY * CELL_HEIGHT;
         let startX = posX * CELL_WIDTH;
