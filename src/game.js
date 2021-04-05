@@ -92,8 +92,35 @@ class Game {
             let now = Date.now();
             deltaTime = (now - this.lastTime) / 1000.0;
             this.lastTime = now;
+            // this.timeAccumulator += deltaTime;
+            // if (this.timeAccumulator > 10) {
+            //     this.timeAccumulator = 0;
+            // }
 
+            // if (this.timeAccumulator > 2 && this.monsters.length > 0) {
+            //     this.activeMonsters.push(this.monsters.pop());
+            //     this.timeAccumulator = 0;
+            // }
 
+            // // 2. Check all collisions between activeMonsters and player / bullets and activeMonsters
+            // this.checkCollisions();
+
+            // // 3. Update positions and check if player, activeMonsters or bullets are going off the screen
+            // this.player.updatePosition(this.map, deltaTime);
+            // this.activeMonsters.forEach((monster, indexM) => {
+            //     monster.updatePosition(this.player, this.activeMonsters);
+            //     if (monster.outOfScreen()) {
+            //         this.activeMonsters.splice(indexM, 1);
+            //     }
+            // });
+            // this.bullets.forEach((bullet, indexB) => {
+            //     bullet.updatePosition();
+            //     if (bullet.outOfScreen()) {
+            //         this.bullets.splice(indexB, 1);
+            //     }
+            // });
+
+            // 2. CLEAR THE CANVAS
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
             // Do the moves
