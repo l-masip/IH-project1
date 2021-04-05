@@ -15,7 +15,7 @@ class Dancer {
     this.spriteIteration = 0;
     this.spriteTimeAcc = 0;
     // this.speed = speed;
-    this.direction = "s"; //inidcator of the direction of the creature for sprites and shooting
+    this.direction = "s"; //inidcator of the direction of the creature for sprites
     this.moving = false;
   }
  
@@ -26,6 +26,16 @@ class Dancer {
       this.cellIndex = nextCellIndex;
     } else {
       this.cellIndex = 0;
+    }
+    this.updateCoords();
+  }
+
+  moveLeft() {
+    const nextCellIndex = this.cellIndex - 1;
+    if (this.steppableMap[nextCellIndex]) {
+      this.cellIndex = nextCellIndex;
+    } else {
+      this.cellIndex = this.steppableMap.length - 1;
     }
     this.updateCoords();
   }

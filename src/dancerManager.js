@@ -51,7 +51,8 @@ class DancerManager {
 
   orchestrate() {
     this.dancers.forEach((dancer) => {
-      dancer.moveRight();
+      // dancer.moveRight();
+      // dancer.moveLeft();
     });
   }
 }
