@@ -79,16 +79,15 @@ class Game {
         // this.createNewRound();
 
         // Add event listener for moving the player
-        // onkeydown = onkeyup = (e) => {
-        //   this.map[e.key] = e.type == "keydown";
+
         this.startLoop();
 
     };
 
     startLoop() {
         const loop = function () {
-            // 1. UPDATE POSITION OF PLAYER AND SHOOT STATUS
-            // // 1. Create a mesure of time for each loop and adds a new monster every 2 seconds
+            // 1. UPDATE POSITION OF PLAYER AND STATUS
+            // // 1. Create a mesure of time for each loop
             let now = Date.now();
             deltaTime = (now - this.lastTime) / 1000.0;
             this.lastTime = now;
@@ -97,27 +96,10 @@ class Game {
             //     this.timeAccumulator = 0;
             // }
 
-            // if (this.timeAccumulator > 2 && this.monsters.length > 0) {
-            //     this.activeMonsters.push(this.monsters.pop());
-            //     this.timeAccumulator = 0;
-            // }
-
-            // // 2. Check all collisions between activeMonsters and player / bullets and activeMonsters
+            // // 2. Check all collisions
             // this.checkCollisions();
 
-            // // 3. Update positions and check if player, activeMonsters or bullets are going off the screen
-            // this.player.updatePosition(this.map, deltaTime);
-            // this.activeMonsters.forEach((monster, indexM) => {
-            //     monster.updatePosition(this.player, this.activeMonsters);
-            //     if (monster.outOfScreen()) {
-            //         this.activeMonsters.splice(indexM, 1);
-            //     }
-            // });
-            // this.bullets.forEach((bullet, indexB) => {
-            //     bullet.updatePosition();
-            //     if (bullet.outOfScreen()) {
-            //         this.bullets.splice(indexB, 1);
-            //     }
+            // this.player.updatePosition(this.map, deltaTime)
             // });
 
             // 2. CLEAR THE CANVAS
