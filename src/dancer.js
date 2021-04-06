@@ -1,7 +1,7 @@
 "use strict";
 
 class Dancer {
-  constructor(canvas, steppableMap, cellIndex, imageID, size,) {
+  constructor(canvas, steppableMap, cellIndex, imageID, size) {
     // this.canvas = canvas;
     // this.ctx = this.canvas.getContext("2d");
     this.cellIndex = cellIndex;

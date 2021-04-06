@@ -3,14 +3,13 @@ const PLAYER_WIDTH = 0; //emptyyyyyyyyyyyyyyyyyyyyy
 const PLAYER_HEIGHT = 0; //emptyyyyyyyyyyyyyyyyyyyy
 
 // PX of each cell
-const CELL_WIDTH = 30;
-const CELL_HEIGHT = 30;
+const CELL_WIDTH = 40;
+const CELL_HEIGHT = 40;
 
 const MAP_CELLS_X = 6;
 const MAP_CELLS_Y = 6;
 
-const PLAYER_START_CELL_X = 4;
-const PLAYER_START_CELL_Y = 6;
+const PLAYER_START_CELL_INDEX = 0;
 
 const MAP_TILES = {//cambiar cualquier característica del mapa
     stepperCell: {
@@ -65,17 +64,10 @@ class Game {
         // Play the background music of the game
         // document.getElementById("background-music").play();
 
-        // this.player = new Player(
-        //   this.canvas,
-        //   50,
-        //   10,
-        //   5,
-        //   this.canvas.width / 2 - 25,
-        //   this.canvas.height / 2 - 25,
-        //   "charset",
-        //   [70, 70],
-        //   [1, 0]
-        // );
+        
+        this.player = new Player(
+            this.canvas, this.steppableMap, PLAYER_START_CELL_INDEX
+        );
         // this.createNewRound();
 
         // Add event listener for moving the player
@@ -111,6 +103,7 @@ class Game {
             // 3. UPDATE THE CANVAS
             this.drawMap();
             this.drawDancers();
+            this.drawPlayer();
             // // Draw the player
             // this.player.draw(deltaTime);
 
@@ -204,6 +197,11 @@ class Game {
             this.ctx.fillStyle = '#ffff00';
             this.drawBackgroundCell(dancer.y, dancer.x, dancer.image);
         });
+    }
+
+    drawPlayer() {
+        this.ctx.fillStyle = '#ff00ff';
+        this.drawBackgroundCell(this.player.y, this.player.x, player.image);
     }
 
     drawBackgroundCell(posY, posX, image) {
