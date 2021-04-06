@@ -5,6 +5,7 @@ class DancerManager {
     this.steppableMap = steppableMap;
     this.roundMovements = null;
     this.currentMove = null;
+    this.isDancing = null;
   }
 
   danceMoves = [
@@ -19,6 +20,10 @@ class DancerManager {
     ]
   }
 
+  getCurrentAction() {
+    return this.roundMovements[this.currentMove - 1];
+  }
+
   generateRound(totalMovements = 3) {
     this.dancers = this.generateDancers();
     this.roundMovements = [];
@@ -28,6 +33,7 @@ class DancerManager {
       const randomMove = this.danceMoves[Math.floor((Math.random() * this.danceMoves.length))];
       this.roundMovements.push(randomMove);
     }
+    this.roundMovements.push(null);
 
     console.log(this.roundMovements);
   }
@@ -42,17 +48,24 @@ class DancerManager {
     return dancers;
   }
 
-  /**
-   * Return false if no more moves
-   */
+
   orchestrate() {
     if (this.currentMove < this.roundMovements.length) {
-      const moveToDo = this.roundMovements[this.currentMove];
-      this.currentMove++;
-
-      this.dancers.forEach((dancer) => {
-        dancer[moveToDo]();
-      });
-    } 
+      if (this.isDancing) {
+        const moveToDo = this.getCurrentAction();
+  
+        if (moveToDo) {
+          this.dancers.forEach((dancer) => {
+            dancer[moveToDo]();
+          });
+        }
+      }
+    } else if (!this.isDancing) {
+      this.isDancing = true;
+      this.currentMove = 0;
+    }
+    this.currentMove++;
   }
+
+
 }

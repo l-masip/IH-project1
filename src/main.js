@@ -45,6 +45,7 @@ function removeGameScreen() {
 }
 
 function createLostGameOverScreen() {
+    removeGameScreen();
     gameOverScreen = buildDom(`
       <main>
           <h1>YOU SUCK!</h1>
@@ -59,6 +60,7 @@ function createLostGameOverScreen() {
 }
 
 function createWonGameOverScreen() {
+    removeGameScreen();
     gameOverScreen = buildDom(`
     <main>
         <h1>WOW, YOU ARE SO COOL!</h1>

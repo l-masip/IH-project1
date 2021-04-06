@@ -1,6 +1,4 @@
-"use strict";
-const PLAYER_WIDTH = 0; //emptyyyyyyyyyyyyyyyyyyyyy
-const PLAYER_HEIGHT = 0; //emptyyyyyyyyyyyyyyyyyyyy
+"use strict"
 
 // PX of each cell
 const CELL_WIDTH = 40;
@@ -64,13 +62,16 @@ class Game {
         // Play the background music of the game
         // document.getElementById("background-music").play();
 
-        
+
         this.player = new Player(
-            this.canvas, this.steppableMap, PLAYER_START_CELL_INDEX
+            this.canvas, this.steppableMap, PLAYER_START_CELL_INDEX,
         );
         // this.createNewRound();
 
         // Add event listener for moving the player
+        onkeydown = (e) => {
+            this.player.updateKeyMap(e);
+        };
 
         this.startLoop();
 
@@ -81,7 +82,7 @@ class Game {
             // 1. UPDATE POSITION OF PLAYER AND STATUS
             // // 1. Create a mesure of time for each loop
             let now = Date.now();
-            deltaTime = (now - this.lastTime) / 1000.0;
+            deltaTime = (now - this.lastTime) / 500.0;
             this.lastTime = now;
             // this.timeAccumulator += deltaTime;
             // if (this.timeAccumulator > 10) {
@@ -89,7 +90,6 @@ class Game {
             // }
 
             // // 2. Check all collisions
-            // this.checkCollisions();
 
             // this.player.updatePosition(this.map, deltaTime)
             // });
@@ -99,26 +99,28 @@ class Game {
 
             // Do the moves
             this.dancerManager.orchestrate();
+            // this.dancerManager.isDancing && this.player.movement() !== this.dancerManager.getCurrentAction() ||
+            this.player.movement();
+            if ( this.checkCollisions()) {
+                this.gameOver();
+            }
 
             // 3. UPDATE THE CANVAS
             this.drawMap();
+            this.drawDirector();
             this.drawDancers();
             this.drawPlayer();
             // // Draw the player
             // this.player.draw(deltaTime);
 
-            // // Draw the activeMonsters
-            // this.activeMonsters.forEach((monster) => {
-            //     monster.draw(deltaTime);
-            // });
-
 
             // 4. TERMINATE LOOP IF THE GAME IS OVER
             if (!this.gameIsOver) {
-                // window.requestAnimationFrame(loop);
                 setTimeout(() => {
                     loop();
-                }, 200);
+                }, 500);
+
+                // window.requestAnimationFrame(loop);
             }
 
         }.bind(this); // var loop = function(){}.bind(this);
@@ -192,6 +194,34 @@ class Game {
         }
     }
 
+    drawDirector() {
+        const currentMovement = this.dancerManager.getCurrentAction();
+        console.log(currentMovement);
+        this.ctx.fillStyle = '#ffffff';
+
+        let sprite;
+        if (this.dancerManager.isDancing) {
+            if (!currentMovement) {
+                sprite = 'FINISH';
+            } else {
+                sprite = '0';
+            }
+        } else if (currentMovement === 'moveLeft') {
+            sprite = '<=';
+        } else if (currentMovement === 'moveRight') {
+            sprite = '=>';
+        } else {
+            sprite = '1';
+        }
+        this.ctx.font = "30px Arial";
+        this.ctx.fillText(sprite, MAP_CELLS_X / 2 * CELL_WIDTH, MAP_CELLS_Y / 2 * CELL_HEIGHT);
+
+        // this.dancerManager.getDrawable().forEach((dancer) => {
+        //     this.ctx.fillStyle = '#ffff00';
+        //     this.drawBackgroundCell(dancer.y, dancer.x, dancer.image);
+        // });
+    }
+
     drawDancers() {
         this.dancerManager.getDrawable().forEach((dancer) => {
             this.ctx.fillStyle = '#ffff00';
@@ -201,7 +231,7 @@ class Game {
 
     drawPlayer() {
         this.ctx.fillStyle = '#ff00ff';
-        this.drawBackgroundCell(this.player.y, this.player.x, player.image);
+        this.drawBackgroundCell(this.player.y, this.player.x, Player.image);
     }
 
     drawBackgroundCell(posY, posX, image) {
@@ -209,6 +239,19 @@ class Game {
         let startX = posX * CELL_WIDTH;
 
         this.ctx.fillRect(startX, startY, CELL_WIDTH, CELL_HEIGHT);
+    }
+
+    checkCollisions() {
+        return this.dancerManager.dancers.some((dancer) => {
+            if (this.player.didCollide(dancer)) {
+                return true;
+            }
+        });
+    }
+
+    gameOver() {
+        createLostGameOverScreen();
+        this.gameIsOver = true
     }
 }
 

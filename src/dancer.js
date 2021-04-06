@@ -19,7 +19,6 @@ class Dancer {
     this.moving = false;
   }
  
-  
   moveRight() {
     const nextCellIndex = this.cellIndex + 1;
     if (this.steppableMap[nextCellIndex]) {

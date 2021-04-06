@@ -15,31 +15,53 @@ class Player {
         // this.speed = speed;
         this.direction = "s"; //inidcator of the direction of the creature for sprites
         this.moving = false;
+        this.keyMap = {};
     }
 
     movement() {
-        if (map["a"]) {
-            const nextCellIndex = this.cellIndex + 1;
-            if (this.steppableMap[nextCellIndex]) {
-                this.cellIndex = nextCellIndex;
-            } else {
-                this.cellIndex = 0;
-            }
-            this.updateCoords();
+        if (this.keyMap["d"]) {
+            this.keyMap["d"] = false;
+            this.moveRight();
+            return 'moveRight';
         }
-        else if (map["d"]) {
-            const nextCellIndex = this.cellIndex - 1;
-            if (this.steppableMap[nextCellIndex]) {
-                this.cellIndex = nextCellIndex;
-            } else {
-                this.cellIndex = this.steppableMap.length - 1;
-            }
-            this.updateCoords();
+        else if (this.keyMap["a"]) {
+            this.keyMap["a"] = false;
+            this.moveLeft();
+            return 'moveLeft';
         }
+    }
+
+    moveRight() {
+        const nextCellIndex = this.cellIndex + 1;
+        if (this.steppableMap[nextCellIndex]) {
+            this.cellIndex = nextCellIndex;
+        } else {
+            this.cellIndex = 0;
+        }
+        this.updateCoords();
+    }
+
+    moveLeft() {
+        const nextCellIndex = this.cellIndex - 1;
+        if (this.steppableMap[nextCellIndex]) {
+            this.cellIndex = nextCellIndex;
+        } else {
+            this.cellIndex = this.steppableMap.length - 1;
+        }
+        this.updateCoords();
+    }
+
+    didCollide(element) {
+        if (this.cellIndex === element.cellIndex)
+        return true;
     }
 
     updateCoords() {
         this.x = this.steppableMap[this.cellIndex].x;
         this.y = this.steppableMap[this.cellIndex].y;
-      }
+    }
+
+    updateKeyMap(e) {
+        this.keyMap[e.key] = e.type == "keydown";
+    }
 }
