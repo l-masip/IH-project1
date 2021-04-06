@@ -20,6 +20,7 @@ const MAP_TILES = {//cambiar cualquier característica del mapa
     },
 }
 
+const ROUND_TOTAL = 3;
 var deltaTime;
 
 class Game {
@@ -98,11 +99,13 @@ class Game {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
             // Do the moves
-            this.dancerManager.orchestrate();
+            if (this.dancerManager.currentRound <= ROUND_TOTAL) {
+            this.dancerManager.orchestrate()
+            } else {this.victory()}
             // this.dancerManager.isDancing && this.player.movement() !== this.dancerManager.getCurrentAction() ||
             this.player.movement();
             if ( this.checkCollisions()) {
-                this.gameOver();
+                // this.gameOver();
             }
 
             // 3. UPDATE THE CANVAS
@@ -251,6 +254,11 @@ class Game {
 
     gameOver() {
         createLostGameOverScreen();
+        this.gameIsOver = true
+    }
+
+    victory() {
+        createWonGameOverScreen();
         this.gameIsOver = true
     }
 }

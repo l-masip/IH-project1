@@ -1,11 +1,12 @@
 class DancerManager {
   constructor(canvas, steppableMap) {
-    this.dancers = null;
     this.canvas = canvas;
     this.steppableMap = steppableMap;
+    this.dancers = this.generateDancers();
     this.roundMovements = null;
     this.currentMove = null;
     this.isDancing = null;
+    this.currentRound = 0;
   }
 
   danceMoves = [
@@ -25,17 +26,16 @@ class DancerManager {
   }
 
   generateRound(totalMovements = 3) {
-    this.dancers = this.generateDancers();
     this.roundMovements = [];
     this.currentMove = 0;
+    this.isDancing = false;
 
     for (let movement = 0; movement < totalMovements; movement++) {
       const randomMove = this.danceMoves[Math.floor((Math.random() * this.danceMoves.length))];
       this.roundMovements.push(randomMove);
     }
     this.roundMovements.push(null);
-
-    console.log(this.roundMovements);
+    this.currentRound ++;
   }
 
   generateDancers() {
@@ -60,12 +60,14 @@ class DancerManager {
           });
         }
       }
+      this.currentMove++;
     } else if (!this.isDancing) {
       this.isDancing = true;
-      this.currentMove = 0;
+      this.currentMove = 1;
+    } else if (this.currentRound < ROUND_TOTAL) {
+      this.generateRound();
+    } else {
+      this.currentRound++;
     }
-    this.currentMove++;
   }
-
-
 }
