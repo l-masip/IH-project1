@@ -21,7 +21,12 @@ const MAP_TILES = {//cambiar cualquier característica del mapa
 }
 
 const ROUND_TOTAL = 3;
+// Miliseconds between each orquestration
+var ACTION_SPEED_MS = 500;
 var deltaTime;
+
+// Customizable movement depending on game settings
+var DEFAULT_MOVEMENT_PX_PER_SECOND =  1000 / (ACTION_SPEED_MS - 200) * CELL_HEIGHT;
 
 class Game {
     constructor(gameScreen) {
@@ -80,16 +85,18 @@ class Game {
     };
 
     startLoop() {
+        let orquestrateInterval = 0;
         const loop = function () {
             // 1. UPDATE POSITION OF PLAYER AND STATUS
             // // 1. Create a mesure of time for each loop
             let now = Date.now();
-            deltaTime = (now - this.lastTime) / 500.0;
+            deltaTime = (now - this.lastTime) / 1000 || 0;
             this.lastTime = now;
             // this.timeAccumulator += deltaTime;
             // if (this.timeAccumulator > 10) {
             //     this.timeAccumulator = 0;
             // }
+            orquestrateInterval += deltaTime;
 
             // // 2. Check all collisions
 
@@ -100,12 +107,22 @@ class Game {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
             // Do the moves
-            if (this.dancerManager.currentRound <= ROUND_TOTAL) {
-            this.dancerManager.orchestrate()
-            } else {this.victory()}
+            if (orquestrateInterval > 0.5) {
+                this.player.movement();
+                if (this.dancerManager.currentRound <= ROUND_TOTAL) {
+                    this.dancerManager.orchestrate();
+                } else {
+                    this.victory();
+                }
+                orquestrateInterval = 0;
+            }
+
+            // Refresh characters positions
+            this.dancerManager.updateDancersPosition();
+            this.player.updatePosition();
+
             // this.dancerManager.isDancing && this.player.movement() !== this.dancerManager.getCurrentAction() ||
-            this.player.movement();
-            if ( this.checkCollisions()) {
+            if (this.checkCollisions()) {
                 // this.gameOver();
             }
 
@@ -120,11 +137,7 @@ class Game {
 
             // 4. TERMINATE LOOP IF THE GAME IS OVER
             if (!this.gameIsOver) {
-                setTimeout(() => {
-                    loop();
-                }, 500);
-
-                // window.requestAnimationFrame(loop);
+                window.requestAnimationFrame(loop);
             }
 
         }.bind(this); // var loop = function(){}.bind(this);
@@ -142,14 +155,14 @@ class Game {
                 if (row === 0 || row === MAP_CELLS_Y - 1 || column === 0 || column === MAP_CELLS_X - 1) {
                     map[row][column] = {
                         ...MAP_TILES.stepperCell,
-                        y: row,
-                        x: column,
+                        y: row * CELL_HEIGHT,
+                        x: column * CELL_WIDTH,
                     };
                 } else {
                     map[row][column] = {
                         ...MAP_TILES.outerCell,
-                        y: row,
-                        x: column,
+                        y: row * CELL_HEIGHT,
+                        x: column * CELL_WIDTH,
                     };
                 }
             }
@@ -193,14 +206,13 @@ class Game {
             for (let column = 0; column < map.length; column++) {
                 const cell = map[row][column];
                 this.ctx.fillStyle = cell.background;
-                this.drawBackgroundCell(row, column);
+                this.drawBackgroundCell(cell.y, cell.x);
             }
         }
     }
 
     drawDirector() {
         const currentMovement = this.dancerManager.getCurrentAction();
-        console.log(currentMovement);
         this.ctx.fillStyle = '#ffffff';
 
         let sprite;
@@ -239,8 +251,8 @@ class Game {
     }
 
     drawBackgroundCell(posY, posX, image) {
-        let startY = posY * CELL_HEIGHT;
-        let startX = posX * CELL_WIDTH;
+        let startY = posY;
+        let startX = posX;
 
         this.ctx.fillRect(startX, startY, CELL_WIDTH, CELL_HEIGHT);
     }
@@ -265,5 +277,19 @@ class Game {
     }
 }
 
+function getNewPosition(entityCoord, destinationCoord, coordsPerSecond = null) {
+    if (!coordsPerSecond) {
+        coordsPerSecond = DEFAULT_MOVEMENT_PX_PER_SECOND;
+    }
+    if (entityCoord > destinationCoord) {
+        let diff = entityCoord - destinationCoord;
+        diff = Math.min(diff, coordsPerSecond * deltaTime); 
+        return entityCoord - diff;
+    } else if (entityCoord < destinationCoord) {
+        let diff = Math.abs(entityCoord - destinationCoord);
+        diff = Math.min(diff, coordsPerSecond * deltaTime); 
+        return entityCoord + diff;
+    }
 
-
+    return entityCoord;
+}

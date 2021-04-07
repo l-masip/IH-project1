@@ -79,4 +79,10 @@ class DancerManager {
       this.currentRound++;
     }
   }
+
+  updateDancersPosition() {
+    this.dancers.forEach((dancer) => {
+      dancer.updatePosition();
+    });
+  }
 }

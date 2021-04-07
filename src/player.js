@@ -4,7 +4,6 @@ class Player {
         // this.ctx = this.canvas.getContext("2d");
         this.cellIndex = cellIndex;
         this.steppableMap = steppableMap;
-        this.updateCoords();
         this.image = null;
         // this.image = document.getElementById(imageID);
         // this.size = size; // this is an array [width,height]
@@ -12,6 +11,8 @@ class Player {
         this.indexIteration = 0;
         this.spriteIteration = 0;
         this.spriteTimeAcc = 0;
+        this.x = this.steppableMap[this.cellIndex].x;
+        this.y = this.steppableMap[this.cellIndex].y;
         // this.speed = speed;
         this.direction = "s"; //inidcator of the direction of the creature for sprites
         this.moving = false;
@@ -38,7 +39,6 @@ class Player {
         } else {
             this.cellIndex = 0;
         }
-        this.updateCoords();
     }
 
     moveLeft() {
@@ -48,7 +48,6 @@ class Player {
         } else {
             this.cellIndex = this.steppableMap.length - 1;
         }
-        this.updateCoords();
     }
 
     didCollide(element) {
@@ -56,12 +55,12 @@ class Player {
         return true;
     }
 
-    updateCoords() {
-        this.x = this.steppableMap[this.cellIndex].x;
-        this.y = this.steppableMap[this.cellIndex].y;
-    }
-
     updateKeyMap(e) {
         this.keyMap[e.key] = e.type == "keydown";
+    }
+
+    updatePosition() {
+        this.x = getNewPosition(this.x, this.steppableMap[this.cellIndex].x);
+        this.y = getNewPosition(this.y, this.steppableMap[this.cellIndex].y);
     }
 }
