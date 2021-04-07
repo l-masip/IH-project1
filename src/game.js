@@ -37,6 +37,7 @@ class Game {
         this.gameIsOver = false;
         this.map = [];
         this.round = 0; //reutilizar?
+        this.backgroundSound = new Audio("/soundfiles/game-music.mp3")
     }
 
     start() {
@@ -61,7 +62,7 @@ class Game {
         this.dancerManager.generateRound();
 
         // Play the background music of the game
-        // document.getElementById("background-music").play();
+        // this.backgroundSound.play()
 
 
         this.player = new Player(
@@ -259,6 +260,7 @@ class Game {
 
     victory() {
         createWonGameOverScreen();
+        this.backgroundSound.pause();
         this.gameIsOver = true
     }
 }

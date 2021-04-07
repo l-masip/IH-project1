@@ -7,6 +7,8 @@ class DancerManager {
     this.currentMove = null;
     this.isDancing = null;
     this.currentRound = 0;
+    this.moveRightSound = new Audio("/soundfiles/right-sound.mp3");
+    this.moveLeftSound = new Audio("/soundfiles/left-sound.mp3");
   }
 
   danceMoves = [
@@ -51,14 +53,21 @@ class DancerManager {
 
   orchestrate() {
     if (this.currentMove < this.roundMovements.length) {
+      const moveToDo = this.getCurrentAction();
       if (this.isDancing) {
-        const moveToDo = this.getCurrentAction();
-  
         if (moveToDo) {
           this.dancers.forEach((dancer) => {
             dancer[moveToDo]();
           });
         }
+      }
+      switch (moveToDo) {
+        case 'moveLeft':
+          this.moveLeftSound.play();
+          break;            
+        case 'moveRight':
+          this.moveRightSound.play();
+          break;
       }
       this.currentMove++;
     } else if (!this.isDancing) {
