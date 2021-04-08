@@ -9,13 +9,31 @@ const MAP_CELLS_Y = 6;
 
 const PLAYER_START_CELL_INDEX = 0;
 
+const STEPPER_IMG = new Image();
+STEPPER_IMG.src = '/img/greentile.png';
+
+const OUTER_IMG = new Image();
+OUTER_IMG.src = '/img/purptile.png';
+
+const PLAYER_FRONT_IMG = new Image()
+PLAYER_FRONT_IMG.src = '/img/hamfront.png';
+
+const PLAYER_BACK_IMG = new Image()
+PLAYER_BACK_IMG.src = '/img/hamback.png';
+
+const PLAYER_LEFT_IMG = new Image()
+PLAYER_LEFT_IMG.src = '/img/hamleft.png';
+
+const PLAYER_RIGHT_IMG = new Image()
+PLAYER_RIGHT_IMG.src = '/img/hamright.png';
+
 const MAP_TILES = {//cambiar cualquier característica del mapa
     stepperCell: {
-        background: '#ff0000',
+        background: STEPPER_IMG,
         steppable: true,
     },
     outerCell: {
-        background: '#0000ff',
+        background: OUTER_IMG,
         steppable: false,
     },
 }
@@ -26,7 +44,7 @@ var ACTION_SPEED_MS = 500;
 var deltaTime;
 
 // Customizable movement depending on game settings
-var DEFAULT_MOVEMENT_PX_PER_SECOND =  1000 / (ACTION_SPEED_MS - 200) * CELL_HEIGHT;
+var DEFAULT_MOVEMENT_PX_PER_SECOND = 1000 / (ACTION_SPEED_MS - 200) * CELL_HEIGHT;
 
 class Game {
     constructor(gameScreen) {
@@ -43,6 +61,7 @@ class Game {
         this.map = [];
         this.round = 0; //reutilizar?
         this.backgroundSound = new Audio("/soundfiles/game-music.mp3")
+        this.framesCounter = 0;
     }
 
     start() {
@@ -87,6 +106,7 @@ class Game {
     startLoop() {
         let orquestrateInterval = 0;
         const loop = function () {
+            this.framesCounter++;
             // 1. UPDATE POSITION OF PLAYER AND STATUS
             // // 1. Create a mesure of time for each loop
             let now = Date.now();
@@ -130,11 +150,14 @@ class Game {
             this.drawMap();
             this.drawDirector();
             this.drawDancers();
-            this.drawPlayer();
+            // this.drawPlayer();
+            this.drawImagePlayer();
+            this.player.animate(this.framesCounter);
             // // Draw the player
             // this.player.draw(deltaTime);
-
-
+            if (this.framesCounter > 1000) {
+                this.framesCounter = 0
+            }
             // 4. TERMINATE LOOP IF THE GAME IS OVER
             if (!this.gameIsOver) {
                 window.requestAnimationFrame(loop);
@@ -206,7 +229,8 @@ class Game {
             for (let column = 0; column < map.length; column++) {
                 const cell = map[row][column];
                 this.ctx.fillStyle = cell.background;
-                this.drawBackgroundCell(cell.y, cell.x);
+                // this.drawBackgroundCell(cell.y, cell.x);
+                this.drawImageCell(cell.y, cell.x, cell.background)
             }
         }
     }
@@ -247,7 +271,21 @@ class Game {
 
     drawPlayer() {
         this.ctx.fillStyle = '#ff00ff';
+        // this.drawBackgroundCell(this.player.x, this.player.y, Player.image);
         this.drawBackgroundCell(this.player.y, this.player.x, Player.image);
+    }
+
+    drawImagePlayer() {
+        this.ctx.drawImage(
+            PLAYER_FRONT_IMG,
+            this.player.framesIndex * Math.floor(PLAYER_FRONT_IMG.width / this.player.frames),
+            0,
+            Math.floor(PLAYER_FRONT_IMG.width / this.player.frames),
+            PLAYER_FRONT_IMG.height,
+            this.player.x,
+            this.player.y,
+            CELL_WIDTH,
+            CELL_HEIGHT)
     }
 
     drawBackgroundCell(posY, posX, image) {
@@ -255,6 +293,10 @@ class Game {
         let startX = posX;
 
         this.ctx.fillRect(startX, startY, CELL_WIDTH, CELL_HEIGHT);
+    }
+
+    drawImageCell(posY, posX, image) {
+        this.ctx.drawImage(image, posX, posY, CELL_WIDTH, CELL_HEIGHT)
     }
 
     checkCollisions() {
@@ -283,11 +325,11 @@ function getNewPosition(entityCoord, destinationCoord, coordsPerSecond = null) {
     }
     if (entityCoord > destinationCoord) {
         let diff = entityCoord - destinationCoord;
-        diff = Math.min(diff, coordsPerSecond * deltaTime); 
+        diff = Math.min(diff, coordsPerSecond * deltaTime);
         return entityCoord - diff;
     } else if (entityCoord < destinationCoord) {
         let diff = Math.abs(entityCoord - destinationCoord);
-        diff = Math.min(diff, coordsPerSecond * deltaTime); 
+        diff = Math.min(diff, coordsPerSecond * deltaTime);
         return entityCoord + diff;
     }
 

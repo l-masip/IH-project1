@@ -19,7 +19,7 @@ class Dancer {
     this.direction = "s"; //inidcator of the direction of the creature for sprites
     this.moving = false;
   }
- 
+
   moveRight() {
     const nextCellIndex = this.cellIndex + 1;
     if (this.steppableMap[nextCellIndex]) {

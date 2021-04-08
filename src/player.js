@@ -1,11 +1,8 @@
 class Player {
     constructor(canvas, steppableMap, cellIndex, imageID, size) {
-        // this.canvas = canvas;
-        // this.ctx = this.canvas.getContext("2d");
         this.cellIndex = cellIndex;
         this.steppableMap = steppableMap;
         this.image = null;
-        // this.image = document.getElementById(imageID);
         // this.size = size; // this is an array [width,height]
         // this.index = index; //this is an array [x,y] to choose creature of the sprite
         this.indexIteration = 0;
@@ -13,10 +10,11 @@ class Player {
         this.spriteTimeAcc = 0;
         this.x = this.steppableMap[this.cellIndex].x;
         this.y = this.steppableMap[this.cellIndex].y;
-        // this.speed = speed;
         this.direction = "s"; //inidcator of the direction of the creature for sprites
         this.moving = false;
         this.keyMap = {};
+        this.frames = 4;
+        this.framesIndex = 0;
     }
 
     movement() {
@@ -30,6 +28,15 @@ class Player {
             this.moveLeft();
             return 'moveLeft';
         }
+    }
+
+    animate(framesCounter) {
+       if(framesCounter%10 === 0) {
+           this.framesIndex++;
+           if(this.framesIndex > 3) {
+               this.framesIndex = 0;
+           }
+       }
     }
 
     moveRight() {
@@ -52,7 +59,7 @@ class Player {
 
     didCollide(element) {
         if (this.cellIndex === element.cellIndex)
-        return true;
+            return true;
     }
 
     updateKeyMap(e) {
