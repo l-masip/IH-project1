@@ -1,36 +1,29 @@
 "use strict";
 
 const DANCER_FRONT_IMG = new Image()
-DANCER_FRONT_IMG.src = '/img/dancefront.png';
+DANCER_FRONT_IMG.src = 'img/dancefront.png';
 
 const DANCER_BACK_IMG = new Image()
-DANCER_BACK_IMG.src = '/img/danceback.png';
+DANCER_BACK_IMG.src = 'img/danceback.png';
 
 const DANCER_LEFT_IMG = new Image()
-DANCER_LEFT_IMG.src = '/img/danceleft.png';
+DANCER_LEFT_IMG.src = 'img/danceleft.png';
 
 const DANCER_RIGHT_IMG = new Image()
-DANCER_RIGHT_IMG.src = '/img/danceright.png';
+DANCER_RIGHT_IMG.src = 'img/danceright.png';
 
 
 class Dancer {
-  constructor(canvas, steppableMap, cellIndex, imageID, size) {
-    // this.canvas = canvas;
-    // this.ctx = this.canvas.getContext("2d");
+  constructor(canvas, steppableMap, cellIndex) {
     this.cellIndex = cellIndex;
     this.steppableMap = steppableMap;
     this.image = null;
-    // this.image = document.getElementById(imageID);
-    // this.size = size; // this is an array [width,height]
-    // this.index = index; //this is an array [x,y] to choose creature of the sprite
     this.x = this.steppableMap[this.cellIndex].x;
     this.y = this.steppableMap[this.cellIndex].y;
     this.indexIteration = 0;
     this.spriteIteration = 0;
     this.spriteTimeAcc = 0;
-    // this.speed = speed;
-    this.direction = "s"; //inidcator of the direction of the creature for sprites
-    this.moving = false;
+    this.currentSprite;
     this.frames = 0;
     this.framesIndex = 0;
     this.updateSpriteDirection();

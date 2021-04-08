@@ -10,10 +10,10 @@ const MAP_CELLS_Y = 6;
 const PLAYER_START_CELL_INDEX = 0;
 
 const STEPPER_IMG = new Image();
-STEPPER_IMG.src = '/img/greentile.png';
+STEPPER_IMG.src = 'img/greentile.png';
 
 const OUTER_IMG = new Image();
-OUTER_IMG.src = '/img/purptile.png';
+OUTER_IMG.src = 'img/purptile.png';
 
 const MAP_TILES = {//cambiar cualquier característica del mapa
     stepperCell: {
@@ -47,8 +47,7 @@ class Game {
         this.activeMonsters = [];
         this.gameIsOver = false;
         this.map = [];
-        this.round = 0; //reutilizar?
-        this.backgroundSound = new Audio("/soundfiles/game-music.mp3")
+        this.backgroundSound = new Audio("soundfiles/game-music.mp3")
         this.framesCounter = 0;
     }
 
@@ -58,9 +57,6 @@ class Game {
         let canvasContainer = document.querySelector(".canvas-container");
         this.canvas = this.gameScreen.querySelector("canvas");
         this.ctx = this.canvas.getContext("2d");
-
-        // Save reference to the score and live elements
-        this.round = this.gameScreen.querySelector(".round");
 
         // Set the canvas dimesions to match the parent
         this.containerWidth = canvasContainer.offsetWidth;
@@ -92,10 +88,10 @@ class Game {
 
     startLoop() {
         let orquestrateInterval = 0;
-        const loop = function () {
+        const loop = () => {
             this.framesCounter++;
-            // 1. UPDATE POSITION OF PLAYER AND STATUS
-            // // 1. Create a mesure of time for each loop
+
+            // 1. Create a mesure of time for each loop
             let now = Date.now();
             deltaTime = (now - this.lastTime) / 1000 || 0;
             this.lastTime = now;
@@ -105,15 +101,10 @@ class Game {
             // }
             orquestrateInterval += deltaTime;
 
-            // // 2. Check all collisions
-
-            // this.player.updatePosition(this.map, deltaTime)
-            // });
-
             // 2. CLEAR THE CANVAS
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-            // Do the moves
+            //  Do the moves
             if (orquestrateInterval > 0.5) {
                 this.player.movement();
                 if (this.dancerManager.currentRound <= ROUND_TOTAL) {
@@ -130,7 +121,7 @@ class Game {
 
             // this.dancerManager.isDancing && this.player.movement() !== this.dancerManager.getCurrentAction() ||
             if (this.checkCollisions()) {
-                // this.gameOver();
+                this.gameOver();
             }
 
             // 3. UPDATE THE CANVAS
@@ -139,7 +130,6 @@ class Game {
             this.drawImagePlayer();
             this.player.animate(this.framesCounter);
             // // Draw the player
-            // this.player.draw(deltaTime);
             if (this.framesCounter > 1000) {
                 this.framesCounter = 0
             }
@@ -148,7 +138,7 @@ class Game {
                 window.requestAnimationFrame(loop);
             }
 
-        }.bind(this); // var loop = function(){}.bind(this);
+        };
 
         window.requestAnimationFrame(loop);
     }
@@ -214,7 +204,6 @@ class Game {
             for (let column = 0; column < map.length; column++) {
                 const cell = map[row][column];
                 this.ctx.fillStyle = cell.background;
-                // this.drawBackgroundCell(cell.y, cell.x);
                 this.drawImageCell(cell.y, cell.x, cell.background)
             }
         }

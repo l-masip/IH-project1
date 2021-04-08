@@ -7,8 +7,8 @@ class DancerManager {
     this.currentMove = null;
     this.isDancing = null;
     this.currentRound = 0;
-    this.moveRightSound = new Audio("/soundfiles/right-sound.mp3");
-    this.moveLeftSound = new Audio("/soundfiles/left-sound.mp3");
+    this.moveRightSound = new Audio("soundfiles/right-sound.mp3");
+    this.moveLeftSound = new Audio("soundfiles/left-sound.mp3");
     this.director = new Director();
   }
 

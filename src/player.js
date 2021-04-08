@@ -1,33 +1,29 @@
 const PLAYER_FRONT_IMG = new Image()
-PLAYER_FRONT_IMG.src = '/img/hamfront.png';
+PLAYER_FRONT_IMG.src = 'img/hamfront.png';
 
 const PLAYER_BACK_IMG = new Image()
-PLAYER_BACK_IMG.src = '/img/hamback.png';
+PLAYER_BACK_IMG.src = 'img/hamback.png';
 
 const PLAYER_LEFT_IMG = new Image()
-PLAYER_LEFT_IMG.src = '/img/hamleft.png';
+PLAYER_LEFT_IMG.src = 'img/hamleft.png';
 
 const PLAYER_RIGHT_IMG = new Image()
-PLAYER_RIGHT_IMG.src = '/img/hamright.png';
+PLAYER_RIGHT_IMG.src = 'img/hamright.png';
 
 class Player {
-    constructor(canvas, steppableMap, cellIndex, imageID, size) {
+    constructor(canvas, steppableMap, cellIndex) {
         this.cellIndex = cellIndex;
         this.steppableMap = steppableMap;
-        this.image = null;
-        // this.size = size; // this is an array [width,height]
-        // this.index = index; //this is an array [x,y] to choose creature of the sprite
         this.indexIteration = 0;
         this.spriteIteration = 0;
         this.spriteTimeAcc = 0;
         this.x = this.steppableMap[this.cellIndex].x;
         this.y = this.steppableMap[this.cellIndex].y;
         this.updateSpriteDirection();
-        this.direction = "s"; //inidcator of the direction of the creature for sprites
-        this.moving = false;
         this.keyMap = {};
         this.frames = 4;
         this.framesIndex = 0;
+        this.currentSprite = null;
         this.updateSpriteDirection();
     }
 

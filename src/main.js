@@ -4,8 +4,8 @@ let gameScreen;
 let gameOverScreen;
 let currentSound;
 
-const VICTORY_SOUND = new Audio("/soundfiles/win-music.mp3")
-const LOST_SOUND = new Audio("/soundfiles/lose-music.mp3")
+const VICTORY_SOUND = new Audio("soundfiles/win-music.mp3")
+const LOST_SOUND = new Audio("soundfiles/lose-music.mp3")
 
 function buildDom(htmlString) {
     const tempDiv = document.createElement("div");
@@ -30,14 +30,14 @@ function createSplashScreen() {
     splashScreen = buildDom(`
         <main class="splash-screen">
           <h1>Hamster Dance!</h1>
-          <img src="/img/bossstill.gif" alt="boss-here" class="boss-here">
+          <img src="img/bossstill.gif" alt="boss-here" class="boss-here">
           <div class="instructions">
             <p> Follow the dancesteps given by the Boss.</p>
             <p> Move<br>left <span style="color:cornflowerblue">(A)</span> or <br>right <span style="color:cornflowerblue">(D)</span>.</p>
             <p> Try not to mess up or you'll be kicked out!</p> 
         </div>
         <button class="splashButton">Let's dance!</button>
-        <img src="/img/hamyey.gif" alt="ham-here" class="ham-here">
+        <img src="img/hamyey.gif" alt="ham-here" class="ham-here">
         </main>
       `);
     document.body.appendChild(splashScreen);
@@ -78,10 +78,10 @@ function createLostGameOverScreen() {
     playSound(LOST_SOUND);
     gameOverScreen = buildDom(`
     <main class="game-over lost">
-        <img src="/img/bossstill.gif" alt="boss-here" class="boss-here">
+        <img src="img/bossstill.gif" alt="boss-here" class="boss-here">
         <h1>YOU SUCK!</h1>
         <p>Come back when you get better.</p>
-        <img src="/img/hamdefeat.gif" alt="happy-ham" class="ham-here">
+        <img src="img/hamdefeat.gif" alt="happy-ham" class="ham-here">
         <button>Try again</button>
     </main>
     `);
@@ -96,10 +96,10 @@ function createWonGameOverScreen() {
     playSound(VICTORY_SOUND);
     gameOverScreen = buildDom(`
     <main class="game-over">
-        <img src="/img/bossstill.gif" alt="boss-here" class="boss-here">
+        <img src="img/bossstill.gif" alt="boss-here" class="boss-here">
         <h1>WOW,<br>YOU ARE SO COOL!</h1>
         <p>Come back whenever you want, we'll be waiting for you. </p>
-        <img src="/img/hamyey.gif" alt="happy-ham" class="ham-here">
+        <img src="img/hamyey.gif" alt="happy-ham" class="ham-here">
         <button>Try again</button>
     </main>
     `);

@@ -1,13 +1,13 @@
 "use strict";
 
 const DIRECTOR_STILL_IMG = new Image()
-DIRECTOR_STILL_IMG.src = '/img/bossstill.png';
+DIRECTOR_STILL_IMG.src = 'img/bossstill.png';
 
 const DIRECTOR_LEFT_IMG = new Image()
-DIRECTOR_LEFT_IMG.src = '/img/bossleft.png';
+DIRECTOR_LEFT_IMG.src = 'img/bossleft.png';
 
 const DIRECTOR_RIGHT_IMG = new Image()
-DIRECTOR_RIGHT_IMG.src = '/img/bossright.png';
+DIRECTOR_RIGHT_IMG.src = 'img/bossright.png';
 
 
 class Director {
