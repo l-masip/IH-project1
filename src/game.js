@@ -15,18 +15,6 @@ STEPPER_IMG.src = '/img/greentile.png';
 const OUTER_IMG = new Image();
 OUTER_IMG.src = '/img/purptile.png';
 
-const PLAYER_FRONT_IMG = new Image()
-PLAYER_FRONT_IMG.src = '/img/hamfront.png';
-
-const PLAYER_BACK_IMG = new Image()
-PLAYER_BACK_IMG.src = '/img/hamback.png';
-
-const PLAYER_LEFT_IMG = new Image()
-PLAYER_LEFT_IMG.src = '/img/hamleft.png';
-
-const PLAYER_RIGHT_IMG = new Image()
-PLAYER_RIGHT_IMG.src = '/img/hamright.png';
-
 const MAP_TILES = {//cambiar cualquier característica del mapa
     stepperCell: {
         background: STEPPER_IMG,
@@ -77,8 +65,8 @@ class Game {
         // Set the canvas dimesions to match the parent
         this.containerWidth = canvasContainer.offsetWidth;
         this.containerHeight = canvasContainer.offsetHeight;
-        this.canvas.setAttribute("width", this.containerWidth);
-        this.canvas.setAttribute("height", this.containerHeight);
+        this.canvas.setAttribute("width", 240);
+        this.canvas.setAttribute("height", 240);
 
         this.map = this.generateMap();
         this.steppableMap = this.generateSteppableMap(this.map);
@@ -86,8 +74,7 @@ class Game {
         this.dancerManager.generateRound();
 
         // Play the background music of the game
-        // this.backgroundSound.play()
-
+        playSound(this.backgroundSound);
 
         this.player = new Player(
             this.canvas, this.steppableMap, PLAYER_START_CELL_INDEX,
@@ -148,9 +135,7 @@ class Game {
 
             // 3. UPDATE THE CANVAS
             this.drawMap();
-            this.drawDirector();
             this.drawDancers();
-            // this.drawPlayer();
             this.drawImagePlayer();
             this.player.animate(this.framesCounter);
             // // Draw the player
@@ -235,53 +220,31 @@ class Game {
         }
     }
 
-    drawDirector() {
-        const currentMovement = this.dancerManager.getCurrentAction();
-        this.ctx.fillStyle = '#ffffff';
-
-        let sprite;
-        if (this.dancerManager.isDancing) {
-            if (!currentMovement) {
-                sprite = 'FINISH';
-            } else {
-                sprite = '0';
-            }
-        } else if (currentMovement === 'moveLeft') {
-            sprite = '<=';
-        } else if (currentMovement === 'moveRight') {
-            sprite = '=>';
-        } else {
-            sprite = '1';
-        }
-        this.ctx.font = "30px Arial";
-        this.ctx.fillText(sprite, MAP_CELLS_X / 2 * CELL_WIDTH, MAP_CELLS_Y / 2 * CELL_HEIGHT);
-
-        // this.dancerManager.getDrawable().forEach((dancer) => {
-        //     this.ctx.fillStyle = '#ffff00';
-        //     this.drawBackgroundCell(dancer.y, dancer.x, dancer.image);
-        // });
-    }
-
     drawDancers() {
         this.dancerManager.getDrawable().forEach((dancer) => {
-            this.ctx.fillStyle = '#ffff00';
-            this.drawBackgroundCell(dancer.y, dancer.x, dancer.image);
+            const sprite = dancer.currentSprite;
+            this.ctx.drawImage(
+                sprite,
+                dancer.framesIndex * Math.floor(sprite.width / dancer.frames),
+                0,
+                Math.floor(sprite.width / dancer.frames),
+                sprite.height,
+                dancer.x,
+                dancer.y,
+                CELL_WIDTH,
+                CELL_HEIGHT);
+            dancer.animate(this.framesCounter);
         });
     }
 
-    drawPlayer() {
-        this.ctx.fillStyle = '#ff00ff';
-        // this.drawBackgroundCell(this.player.x, this.player.y, Player.image);
-        this.drawBackgroundCell(this.player.y, this.player.x, Player.image);
-    }
-
     drawImagePlayer() {
+        const sprite = this.player.currentSprite;
         this.ctx.drawImage(
-            PLAYER_FRONT_IMG,
-            this.player.framesIndex * Math.floor(PLAYER_FRONT_IMG.width / this.player.frames),
+            sprite,
+            this.player.framesIndex * Math.floor(sprite.width / this.player.frames),
             0,
-            Math.floor(PLAYER_FRONT_IMG.width / this.player.frames),
-            PLAYER_FRONT_IMG.height,
+            Math.floor(sprite.width / this.player.frames),
+            sprite.height,
             this.player.x,
             this.player.y,
             CELL_WIDTH,
@@ -314,7 +277,6 @@ class Game {
 
     victory() {
         createWonGameOverScreen();
-        this.backgroundSound.pause();
         this.gameIsOver = true
     }
 }

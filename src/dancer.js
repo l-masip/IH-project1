@@ -1,5 +1,18 @@
 "use strict";
 
+const DANCER_FRONT_IMG = new Image()
+DANCER_FRONT_IMG.src = '/img/dancefront.png';
+
+const DANCER_BACK_IMG = new Image()
+DANCER_BACK_IMG.src = '/img/danceback.png';
+
+const DANCER_LEFT_IMG = new Image()
+DANCER_LEFT_IMG.src = '/img/danceleft.png';
+
+const DANCER_RIGHT_IMG = new Image()
+DANCER_RIGHT_IMG.src = '/img/danceright.png';
+
+
 class Dancer {
   constructor(canvas, steppableMap, cellIndex, imageID, size) {
     // this.canvas = canvas;
@@ -18,6 +31,18 @@ class Dancer {
     // this.speed = speed;
     this.direction = "s"; //inidcator of the direction of the creature for sprites
     this.moving = false;
+    this.frames = 0;
+    this.framesIndex = 0;
+    this.updateSpriteDirection();
+  }
+
+  animate(framesCounter) {
+    if (framesCounter % 10 === 0) {
+      this.framesIndex++;
+      if (this.framesIndex > this.frames - 1) {
+        this.framesIndex = 0;
+      }
+    }
   }
 
   moveRight() {
@@ -27,6 +52,7 @@ class Dancer {
     } else {
       this.cellIndex = 0;
     }
+    this.updateSpriteDirection();
   }
 
   moveLeft() {
@@ -35,6 +61,24 @@ class Dancer {
       this.cellIndex = nextCellIndex;
     } else {
       this.cellIndex = this.steppableMap.length - 1;
+    }
+    this.updateSpriteDirection();
+  }
+
+  updateSpriteDirection() {
+    const toCell = this.steppableMap[this.cellIndex];
+    if (this.x > toCell.x) {
+      this.currentSprite = DANCER_LEFT_IMG;
+      this.frames = 4;
+    } else if (this.x < toCell.x) {
+      this.currentSprite = DANCER_RIGHT_IMG;
+      this.frames = 4;
+    } else if (this.y > toCell.y) {
+      this.currentSprite = DANCER_BACK_IMG;
+      this.frames = 2;
+    } else {
+      this.currentSprite = DANCER_FRONT_IMG;
+      this.frames = 2;
     }
   }
 

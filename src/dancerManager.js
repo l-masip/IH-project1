@@ -9,6 +9,7 @@ class DancerManager {
     this.currentRound = 0;
     this.moveRightSound = new Audio("/soundfiles/right-sound.mp3");
     this.moveLeftSound = new Audio("/soundfiles/left-sound.mp3");
+    this.director = new Director();
   }
 
   danceMoves = [
@@ -19,7 +20,7 @@ class DancerManager {
   getDrawable() {
     return [
       ...this.dancers,
-      // this.director,
+      this.director,
     ]
   }
 
@@ -60,6 +61,8 @@ class DancerManager {
             dancer[moveToDo]();
           });
         }
+      } else if (moveToDo) {
+        this.director[moveToDo]();
       }
       switch (moveToDo) {
         case 'moveLeft':
@@ -71,6 +74,7 @@ class DancerManager {
       }
       this.currentMove++;
     } else if (!this.isDancing) {
+      this.director.moveStill();
       this.isDancing = true;
       this.currentMove = 1;
     } else if (this.currentRound < ROUND_TOTAL) {

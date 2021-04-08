@@ -2,6 +2,10 @@ let game;
 let splashScreen;
 let gameScreen;
 let gameOverScreen;
+let currentSound;
+
+const VICTORY_SOUND = new Audio("/soundfiles/win-music.mp3")
+const LOST_SOUND = new Audio("/soundfiles/lose-music.mp3")
 
 function buildDom(htmlString) {
     const tempDiv = document.createElement("div");
@@ -9,11 +13,31 @@ function buildDom(htmlString) {
     return tempDiv.children[0];
 }
 
+function playSound(newSound) {
+    stopSound();
+    currentSound = newSound;
+    currentSound.play();
+}
+
+function stopSound() {
+    if (currentSound) {
+        currentSound.pause();
+    }
+}
+
 function createSplashScreen() {
+    stopSound();
     splashScreen = buildDom(`
-        <main>
-          <h1>Dance!</h1>
-          <button>Let's dance!</button>
+        <main class="splash-screen">
+          <h1>Hamster Dance!</h1>
+          <img src="/img/bossstill.gif" alt="boss-here" class="boss-here">
+          <div class="instructions">
+            <p> Follow the dancesteps given by the Boss.</p>
+            <p> Move<br>left <span style="color:cornflowerblue">(A)</span> or <br>right <span style="color:cornflowerblue">(D)</span>.</p>
+            <p> Try not to mess up or you'll be kicked out!</p> 
+        </div>
+        <button class="splashButton">Let's dance!</button>
+        <img src="/img/hamyey.gif" alt="ham-here" class="ham-here">
         </main>
       `);
     document.body.appendChild(splashScreen);
@@ -22,7 +46,9 @@ function createSplashScreen() {
 }
 
 function removeSplashScreen() {
-    splashScreen.remove();
+    if (splashScreen) {
+        splashScreen.remove();
+    }
 }
 
 function createGameScreen() {
@@ -42,18 +68,23 @@ function createGameScreen() {
 }
 
 function removeGameScreen() {
-    gameScreen.remove();
+    if (gameScreen) {
+        gameScreen.remove();
+    }
 }
 
 function createLostGameOverScreen() {
     removeGameScreen();
+    playSound(LOST_SOUND);
     gameOverScreen = buildDom(`
-      <main>
-          <h1>YOU SUCK!</h1>
-          <p>Come back when you get better.</span> </p>
-          <button>Try again</button>
-      </main>
-      `);
+    <main class="game-over lost">
+        <img src="/img/bossstill.gif" alt="boss-here" class="boss-here">
+        <h1>YOU SUCK!</h1>
+        <p>Come back when you get better.</p>
+        <img src="/img/hamdefeat.gif" alt="happy-ham" class="ham-here">
+        <button>Try again</button>
+    </main>
+    `);
     const button = gameOverScreen.querySelector("button");
     button.addEventListener("click", startGame)
 
@@ -62,21 +93,26 @@ function createLostGameOverScreen() {
 
 function createWonGameOverScreen() {
     removeGameScreen();
+    playSound(VICTORY_SOUND);
     gameOverScreen = buildDom(`
-    <main>
-        <h1>WOW, YOU ARE SO COOL!</h1>
-        <p>Come back whenever you want, we'll be waiting for you.</span> </p>
+    <main class="game-over">
+        <img src="/img/bossstill.gif" alt="boss-here" class="boss-here">
+        <h1>WOW,<br>YOU ARE SO COOL!</h1>
+        <p>Come back whenever you want, we'll be waiting for you. </p>
+        <img src="/img/hamyey.gif" alt="happy-ham" class="ham-here">
         <button>Try again</button>
     </main>
     `);
-  const button = gameOverScreen.querySelector("button");
-  button.addEventListener("click", startGame)
+    const button = gameOverScreen.querySelector("button");
+    button.addEventListener("click", startGame)
 
-  document.body.appendChild(gameOverScreen)
+    document.body.appendChild(gameOverScreen)
 }
 
 function removeGameOverScreen() {
-    gameOverScreen.remove()
+    if (gameOverScreen) {
+        gameOverScreen.remove()
+    }
 }
 
 function startGame() {
@@ -97,4 +133,4 @@ window.addEventListener("load", createSplashScreen);
 
 
 // TODO: REMOVE THIS AFTER DEBUG
-window.addEventListener("load", startGame);
+// window.addEventListener("load", startGame);
