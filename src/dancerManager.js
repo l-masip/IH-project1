@@ -28,7 +28,7 @@ class DancerManager {
     return this.roundMovements[this.currentMove - 1];
   }
 
-  generateRound(totalMovements = 3) {
+  generateRound(totalMovements = 3) { //edit how many movements each round
     this.roundMovements = [];
     this.currentMove = 0;
     this.isDancing = false;

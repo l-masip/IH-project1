@@ -26,7 +26,7 @@ const MAP_TILES = {//cambiar cualquier característica del mapa
     },
 }
 
-const ROUND_TOTAL = 3;
+const ROUND_TOTAL = 10; //change total rounds
 // Miliseconds between each orquestration
 var ACTION_SPEED_MS = 500;
 var deltaTime;
@@ -47,7 +47,7 @@ class Game {
         this.activeMonsters = [];
         this.gameIsOver = false;
         this.map = [];
-        this.backgroundSound = new Audio("soundfiles/game-music.mp3")
+        this.backgroundSound = new Audio("soundfiles/game-music.mp3");
         this.framesCounter = 0;
     }
 

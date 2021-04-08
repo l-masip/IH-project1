@@ -1,7 +1,7 @@
-# Somethingsomething Dance
+# Hamster Dance!
 
 ## Instructions
-Move left `<-`, right `->` or pose (v) according to the director's instructions.
+Move left `a` or right `d` according to the Boss' instructions.
 Try to follow the beat so the other dancers won't crash with you!
 
 ## MVP
@@ -11,19 +11,29 @@ Player can follow director's dance moves without disturbing the other dancers.
 
 ### main
 ```
-splashScreen()
+createSplashScreen()
     buildSplash()
     addEventListener(startGame)
 
-startGame()
-    destroySplashScreen()
+removeSplashScreen()
+
+createGameScreen()
     createNewGame()
     game.start()
 
-gameOver()
-    destroyGame()
-    buildGameOver()
+createLostGameOverScreen()
+    removeGameScreen()
+    gameOverSceen()
     addEventListener(startGame)
+
+createWonGameOverScreen()
+    removeGameScreen()
+    gameOverSceen()
+    addEventListener(startGame)
+
+removeGameOverScreen()
+
+startGame()
 ```
 
 ### game
@@ -32,35 +42,54 @@ class game
     constructor()
     start()
     startLoop()
-    updatePositions()
-    checkCollision
-    updateCanvas()
+    generateMap()
+    generateSteppableMap()
+    drawMap()
+    drawDancers()
+    drawPlayer()
+    drawBackgroundCell()
+    drawImageCell()
+    checkCollisions()
+    gameOver()
+    victory()
+
+getNewPoition()
 ```
 
-### director
+### dancerManager
 ```
-class director
-    randomizeMoves()
-    generateMoves()
-	generateRound
-		(possibility of different difficulties and speeds)
-    performRound()
+class DancerManager
+    constructor()
+    danceMoves
+    getDrawable()
+    getCurrentAction()
+    generateRound()
+    generateDancers()
+    orchestrate()
+    updateDancersPosition()
 ```
 
 ### dancers
 ```
-class dancers
-	updatePosition(performRound)
-    draw()
-
-class adjacent-dancers (extends dancers)
-	collision()
+class Dancer
+    constructor()
+    animate()
+    moveRight()
+    moveLeft()
+    updateSpriteDirection()
+	updatePosition()
 ```
 
 ### player
 ```
-class player
-	performDance()
+class Player
+    constructor()
+	movement()
+    animate()
+    moveRight()
+    moveLeft()
+    updateSpriteDirection()
+    didCollide()
+    updateKeyMap()
     updatePosition()
-    draw()
 ```
