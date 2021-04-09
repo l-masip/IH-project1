@@ -91,7 +91,7 @@ class Dancer
 ```
 class Player
     constructor()
-	movement()
+    movement()
     animate()
     moveRight()
     moveLeft()
