@@ -103,8 +103,6 @@ class Player
 
 ## Links
 
-Presentation [Powerpoint]
-[Powerpoint]: https://drive.google.com/file/d/1l4hX1_-Dm_e8N9VDbAScpPGGs8OmeBha/view?usp=sharing
+[PowerPoint Presentation](https://drive.google.com/file/d/1l4hX1_-Dm_e8N9VDbAScpPGGs8OmeBha/view?usp=sharing)
 
-Link to the [game]
-[game]: l-masip.github.io/ih-project1/
+[Link to the game](l-masip.github.io/ih-project1/) 
