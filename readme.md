@@ -1,15 +1,18 @@
 # Hamster Dance!
 
 ## Instructions
+
 Move left `a` or right `d` according to the Boss' instructions.
 Try to follow the beat so the other dancers won't crash with you!
 
 ## MVP
-Player can follow director's dance moves without disturbing the other dancers.
+
+The player must follow the rhythm of the music and copy the director's dance moves to dance around a circle without disturbing the other dancers.
 
 ## Data structure
 
 ### main
+
 ```
 createSplashScreen()
     buildSplash()
@@ -37,6 +40,7 @@ startGame()
 ```
 
 ### game
+
 ```
 class game
     constructor()
@@ -53,10 +57,11 @@ class game
     gameOver()
     victory()
 
-getNewPoition()
+getNewPosition()
 ```
 
 ### dancerManager
+
 ```
 class DancerManager
     constructor()
@@ -70,6 +75,7 @@ class DancerManager
 ```
 
 ### dancers
+
 ```
 class Dancer
     constructor()
@@ -77,10 +83,11 @@ class Dancer
     moveRight()
     moveLeft()
     updateSpriteDirection()
-	updatePosition()
+    updatePosition()
 ```
 
 ### player
+
 ```
 class Player
     constructor()
@@ -93,3 +100,11 @@ class Player
     updateKeyMap()
     updatePosition()
 ```
+
+## Links
+
+Presentation [Powerpoint]
+[Powerpoint]: https://drive.google.com/file/d/1l4hX1_-Dm_e8N9VDbAScpPGGs8OmeBha/view?usp=sharing
+
+Link to the [game]
+[game]: l-masip.github.io/ih-project1/

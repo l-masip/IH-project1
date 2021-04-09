@@ -71,6 +71,10 @@ class Game {
 
         // Play the background music of the game
         playSound(this.backgroundSound);
+        this.backgroundSound.addEventListener('ended', function() {
+            this.currentTime = 0;
+            this.play();
+        }, false);
 
         this.player = new Player(
             this.canvas, this.steppableMap, PLAYER_START_CELL_INDEX,
